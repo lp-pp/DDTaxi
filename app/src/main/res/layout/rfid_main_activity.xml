@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_white"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/titlebar" layout="@layout/titlebar" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:layout_marginTop="3dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/didi_taxi"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:scaleType="centerCrop"/>
+
+        <!--<pl.droidsonroids.gif.GifImageView-->
+            <!--android:id="@+id/nfc_scan"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="9"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:padding="2dp"-->
+            <!--android:scaleType="centerInside"-->
+            <!--android:src="@drawable/nfc_scan" />-->
+
+
+        <TextView
+            android:id="@+id/text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:gravity="center_horizontal"
+            android:padding="5dp"
+            android:text="请将手机背面的NFC感应区\n靠近司机证件"
+            android:textAppearance="@android:style/TextAppearance.Material.Subhead"
+            android:textSize="18sp"
+            android:textStyle="normal" />
+
+
+        <ImageView
+            android:id="@+id/nfc_report"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:layout_marginTop="3dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/blue_nfc_phone"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:scaleType="fitCenter"/>
+
+        <ImageView
+            android:id="@+id/iv_bottom_sheet_item2"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:scaleType="fitCenter"
+            android:background="@android:color/transparent"
+            android:src="@drawable/iv_bottom_sheet_item2" />
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

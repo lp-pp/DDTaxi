@@ -1,0 +1,118 @@
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
+apply plugin: 'com.android.application'
+
+def getDateTime() {
+    DateFormat df = new SimpleDateFormat("yyyyMMddHHmm")
+    return Long.parseLong(df.format(new Date()))
+}
+
+android {
+    //配置签名文件
+    signingConfigs {
+        ppRealseConfig {
+            keyAlias 'pp'
+            keyPassword 'pp_platform'
+            storeFile file('keystore/pp_platform.jks')
+            storePassword 'pp_platform'
+        }
+    }
+
+    compileSdkVersion rootProject.ext.versions['compileSdkVersion']
+    buildToolsVersion rootProject.ext.versions['buildToolsVersion']
+
+    defaultConfig {
+        applicationId "com.lp.ddtaxi"
+        minSdkVersion rootProject.ext.versions['minSdkVersion']
+        targetSdkVersion rootProject.ext.versions['targetSdkVersion']
+        versionCode rootProject.ext.versions['versionCode']
+        versionName rootProject.ext.versions['versionName']
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+                //避免出现dlopen failed: library “libc++_shared.so” not found的错误
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDir 'libs'
+//            jni.srcDirs = []    //disable automatic ndk-build
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.ppRealseConfig
+
+//            生成指定APK名称:
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = "DDTaxi-release_v${defaultConfig.versionCode}" +
+                                ".${defaultConfig.versionName}_${getDateTime()}.apk"
+                        outputFileName = fileName
+                    }
+                }
+            }
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.10.2"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+//    implementation fileTree(dir: "$buildDir/native-libs", include: 'native-libs.jar')
+    implementation rootProject.ext.dependencies['androidx_appcompat']
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //xutils
+    implementation 'org.xutils:xutils:3.3.36'
+    //Gson
+    implementation 'com.google.code.gson:gson:2.8.0'
+    //ViewPagerIndicator
+    implementation 'com.github.JakeWharton:ViewPagerIndicator:2.4.1@aar'
+    //增加TabLayout 指示打车的Tab界面
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.6'
+    // okhttp3的依赖
+    implementation 'com.squareup.okhttp3:okhttp:3.8.1'
+    implementation 'com.android.support:recyclerview-v7:22.2.1'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
+
+    implementation files('libs/BaiduLBS_Android.jar')
+
+    implementation project(path: ':SlidingMenu_Library')
+    implementation project(path: ':openCVLibrary440')
+}
+
+task nativeLibsToJar(type: Jar, description: 'create a jar archive of the native libs') {
+    destinationDir file("$buildDir/native-libs")
+    baseName 'native-libs'
+    from fileTree(dir: 'libs', include: '**/*.so')
+    into 'lib/'
+}
+
+tasks.withType(org.gradle.api.tasks.compile.JavaCompile) {
+    compileTask -> compileTask.dependsOn(nativeLibsToJar)
+}

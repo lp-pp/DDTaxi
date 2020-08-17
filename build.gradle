@@ -1,0 +1,40 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.0.0"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+ext {
+    versions = [
+            "compileSdkVersion": 29,
+            "buildToolsVersion": "30.0.0",
+            "minSdkVersion"    : 26,
+            "targetSdkVersion" : 29,
+            "versionCode"      : 1,
+            "versionName"      : "1.0.0",
+    ]
+
+    dependencies = [
+            // 依赖包
+            "androidx_appcompat"      : 'androidx.appcompat:appcompat:1.1.0',
+    ]
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

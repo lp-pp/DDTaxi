@@ -1,0 +1,4 @@
+include ':openCVLibrary440'
+include ':app'
+include ':SlidingMenu_Library'
+rootProject.name = "DDTaxi"
